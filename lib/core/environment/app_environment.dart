@@ -1,6 +1,22 @@
-import 'package:flutter/services.dart';
-
 enum AppEnvironment { dev, stg, prd }
+
+const _defaultDevApiBaseUrl = String.fromEnvironment(
+  'DEV_API_BASE_URL',
+  defaultValue: 'fixture://dev/api/',
+);
+const _defaultDevFixtureRoot = String.fromEnvironment(
+  'DEV_FIXTURE_ROOT',
+  defaultValue: 'assets/fixtures/dev',
+);
+const _defaultStgApiBaseUrl = String.fromEnvironment(
+  'STG_API_BASE_URL',
+  defaultValue: 'fixture://stg/api/',
+);
+const _defaultStgFixtureRoot = String.fromEnvironment(
+  'STG_FIXTURE_ROOT',
+  defaultValue: 'assets/fixtures/stg',
+);
+const _defaultPrdApiBaseUrl = String.fromEnvironment('PRD_API_BASE_URL');
 
 AppEnvironment appEnvironmentFromDefine(
   String value, {
@@ -11,14 +27,6 @@ AppEnvironment appEnvironmentFromDefine(
     'stg' => AppEnvironment.stg,
     'prd' || 'prod' => AppEnvironment.prd,
     _ => fallback,
-  };
-}
-
-extension AppEnvironmentFile on AppEnvironment {
-  String get envFile => switch (this) {
-    AppEnvironment.dev => '.env.dev',
-    AppEnvironment.stg => '.env.stg',
-    AppEnvironment.prd => '.env.prd',
   };
 }
 
@@ -35,45 +43,29 @@ final class AppEnvironmentConfig {
 
   bool get usesFixtures => fixtureRoot != null;
 
-  static Future<AppEnvironmentConfig> load(
-    AppEnvironment environment, {
-    AssetBundle? bundle,
-  }) async {
-    final content = await (bundle ?? rootBundle).loadString(
-      environment.envFile,
-    );
-    final values = _parse(content);
-    final apiBaseUrl = values['API_BASE_URL'];
-    if (apiBaseUrl == null || apiBaseUrl.isEmpty) {
-      throw StateError('API_BASE_URL não configurada.');
+  static Future<AppEnvironmentConfig> load(AppEnvironment environment) {
+    final apiBaseUrl = switch (environment) {
+      AppEnvironment.dev => _defaultDevApiBaseUrl,
+      AppEnvironment.stg => _defaultStgApiBaseUrl,
+      AppEnvironment.prd => _defaultPrdApiBaseUrl,
+    };
+    final fixtureRoot = switch (environment) {
+      AppEnvironment.dev => _defaultDevFixtureRoot,
+      AppEnvironment.stg => _defaultStgFixtureRoot,
+      AppEnvironment.prd => null,
+    };
+    if (apiBaseUrl.isEmpty) {
+      return Future.error(
+        StateError('API_BASE_URL não configurada para o ambiente.'),
+      );
     }
 
-    return AppEnvironmentConfig(
-      environment: environment,
-      apiBaseUrl: apiBaseUrl,
-      fixtureRoot: values['FIXTURE_ROOT'],
+    return Future.value(
+      AppEnvironmentConfig(
+        environment: environment,
+        apiBaseUrl: apiBaseUrl,
+        fixtureRoot: fixtureRoot,
+      ),
     );
-  }
-
-  static Map<String, String> _parse(String content) {
-    final values = <String, String>{};
-    for (final line in content.split('\n')) {
-      final trimmed = line.trim();
-      if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
-      final separator = trimmed.indexOf('=');
-      if (separator <= 0) continue;
-      final key = trimmed.substring(0, separator).trim();
-      final value = trimmed.substring(separator + 1).trim();
-      values[key] = _unquote(value);
-    }
-    return values;
-  }
-
-  static String _unquote(String value) {
-    if (value.length < 2) return value;
-    final isQuoted =
-        (value.startsWith('"') && value.endsWith('"')) ||
-        (value.startsWith("'") && value.endsWith("'"));
-    return isQuoted ? value.substring(1, value.length - 1) : value;
   }
 }

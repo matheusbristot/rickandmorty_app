@@ -10,15 +10,21 @@ void main() {
     // Act
     final dev = await AppEnvironmentConfig.load(AppEnvironment.dev);
     final stg = await AppEnvironmentConfig.load(AppEnvironment.stg);
-    final prd = await AppEnvironmentConfig.load(AppEnvironment.prd);
 
     // Assert
     expect(dev.apiBaseUrl, 'fixture://dev/api/');
     expect(dev.fixtureRoot, 'assets/fixtures/dev');
     expect(stg.apiBaseUrl, 'fixture://stg/api/');
     expect(stg.fixtureRoot, 'assets/fixtures/stg');
-    expect(prd.apiBaseUrl, 'https://rickandmortyapi.com/api/');
-    expect(prd.fixtureRoot, isNull);
+  });
+
+  test('exige a URL de produção durante o build', () async {
+    // Arrange
+    // Act
+    final load = AppEnvironmentConfig.load(AppEnvironment.prd);
+
+    // Assert
+    await expectLater(load, throwsA(isA<StateError>()));
   });
 
   test('resolve o ambiente informado por dart-define', () {
