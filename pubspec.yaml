@@ -1,0 +1,39 @@
+name: rickandmorty_app
+description: "Offline-first Rick and Morty episode browser."
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  cached_network_image: ^4.0.0
+  flutter:
+    sdk: flutter
+
+  character:
+    path: packages/character
+  cache:
+    path: packages/cache
+  network:
+    path: packages/network
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.5
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env.dev
+    - .env.stg
+    - .env.prd
+    - assets/fixtures/dev/episodes/
+    - assets/fixtures/dev/characters/
+    - assets/fixtures/stg/episodes/
+    - assets/fixtures/stg/characters/
