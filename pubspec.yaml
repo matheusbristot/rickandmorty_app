@@ -1,7 +1,7 @@
 name: rickandmorty_app
 description: "Offline-first Rick and Morty episode browser."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 1.0.0
+version: 1.0.1
 
 environment:
   sdk: ^3.13.2
