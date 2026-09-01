@@ -1,0 +1,9 @@
+name: cache
+description: Local key-value cache abstraction and SharedPreferences implementation.
+publish_to: none
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  shared_preferences: ^2.5.3
