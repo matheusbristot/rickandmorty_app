@@ -25,6 +25,7 @@ lib/
     └── presentation/               # estado, widgets, tela e ChangeNotifier
 packages/character/                 # domínio e requests de personagens
 packages/network/                   # cliente HTTP/JSON reutilizável
+packages/cache/                     # contrato de cache e implementação local
 ```
 
 Os testes específicos de cada package ficam em `packages/<nome>/test`; a
@@ -32,6 +33,13 @@ pasta `test/` na raiz contém somente testes da aplicação, organizados por
 `core` e `features/episode/<camada>`, sem arquivos diretamente na sua raiz.
 
 O estado da tela é gerenciado por `EpisodeViewModel` (`ChangeNotifier`) e o campo do número usa `ValueNotifier`. A camada de domínio não conhece Flutter, HTTP ou persistência. O package `character` expõe eventos tipados de carregamento para que um erro em um personagem não interrompa o stream dos demais.
+
+O package `cache` fornece a abstração de armazenamento chave-valor usada pela
+fonte local de episódios. Sua implementação padrão usa
+`SharedPreferencesAsync`; a dependência concreta fica montada no composition
+root (`lib/core/di`), enquanto a feature depende apenas do contrato `Cache`.
+Os episódios são persistidos como JSON por número, permitindo exibição
+imediata do cache, atualização em segundo plano e funcionamento offline.
 
 A orquestração entre episódio e personagens fica exclusivamente no
 `EpisodeRepositoryImpl`. As regras de fronteiras e responsabilidades estão
