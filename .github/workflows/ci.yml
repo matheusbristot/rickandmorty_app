@@ -8,6 +8,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      publish_production:
+        description: Build and publish the production APK for the current version
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -68,7 +74,9 @@ jobs:
 
   detect-version:
     name: Detect production version change
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && inputs.publish_production)
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.version.outputs.changed }}
@@ -87,14 +95,25 @@ jobs:
           set -euo pipefail
 
           current_version="$(awk '$1 == "version:" { print $2; exit }' pubspec.yaml | tr -d '"')"
-          previous_version="$(git show HEAD^:pubspec.yaml | awk '$1 == "version:" { print $2; exit }' | tr -d '"')"
-
-          if [[ -z "$current_version" || -z "$previous_version" ]]; then
+          if [[ -z "$current_version" ]]; then
             echo "::error::Unable to read the version from pubspec.yaml."
             exit 1
           fi
 
           echo "Current version: $current_version"
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "value=$current_version" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          previous_version="$(git show HEAD^:pubspec.yaml | awk '$1 == "version:" { print $2; exit }' | tr -d '"')"
+          if [[ -z "$previous_version" ]]; then
+            echo "::error::Unable to read the previous version from pubspec.yaml."
+            exit 1
+          fi
+
           echo "Previous version: $previous_version"
 
           if [[ "$current_version" != "$previous_version" ]]; then

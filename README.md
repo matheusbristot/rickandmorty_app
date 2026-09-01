@@ -78,6 +78,9 @@ flavor `prd`, publica o arquivo como artefato do GitHub Actions por 90 dias e
 cria uma GitHub Release publicada com o APK anexado. A tag da release segue o
 formato `v<versão>`, como `v1.0.0`.
 
+Para publicar a versão inicial sem alterar artificialmente o número da versão,
+execute o workflow manualmente com `publish_production=true`.
+
 Os ambientes são definidos por `--dart-define` no momento do build e não são
 assets do aplicativo. O job de produção não publica na Google Play e usa a
 assinatura debug existente no projeto. Configure o secret `ENV_PRD` no GitHub
