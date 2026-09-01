@@ -1,0 +1,14 @@
+name: character
+description: Character domain and data package for the Rick and Morty app.
+publish_to: none
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  network:
+    path: ../network
+
+dev_dependencies:
+  mocktail: ^1.0.5
+  test: ^1.25.14
