@@ -52,12 +52,19 @@ ambientes `dev` e `stg` carregam fixtures locais em
 ```bash
 make run-stg
 make run-prd
+
+# build local do APK de produção usando .env.prd
+make build-prd-local
 ```
 
 Os comandos de execução usam `--dart-define=APP_ENV=...` e permitem passar
 outros parâmetros ao Flutter conforme necessário. Os principais atalhos do
 dia a dia estão disponíveis no `Makefile`, incluindo `make analyze`,
 `make test`, `make dart-test`, `make format` e `make clean`.
+
+`make build-prd-local` lê `API_BASE_URL` do arquivo local `.env.prd` e injeta
+o valor como `PRD_API_BASE_URL` durante a compilação. O arquivo `.env.prd` não
+é versionado.
 
 ## Validar
 
