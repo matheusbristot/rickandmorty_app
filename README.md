@@ -69,6 +69,22 @@ make test
 `make test` executa a suíte da aplicação e também as suítes isoladas de
 `packages/network` e `packages/character`.
 
+## CI/CD
+
+Pull requests direcionados para `main` e pushes após merges em `main` executam
+análise, todos os testes e o build Android de debug. Quando a versão do
+`pubspec.yaml` muda em `main`, um segundo job gera o APK de produção com o
+flavor `prd`, publica o arquivo como artefato do GitHub Actions por 90 dias e
+cria uma GitHub Release publicada com o APK anexado. A tag da release segue o
+formato `v<versão>`, como `v1.0.0`.
+
+Os ambientes são definidos por `--dart-define` no momento do build e não são
+assets do aplicativo. O job de produção não publica na Google Play e usa a
+assinatura debug existente no projeto. Configure o secret `ENV_PRD` no GitHub
+Actions com o conteúdo do arquivo `.env.prd`; a CI extrai `API_BASE_URL` e o
+injeta como `PRD_API_BASE_URL` somente durante a compilação de produção. O
+ambiente `prd` não possui URL padrão e falha se essa variável não for definida.
+
 ## Regras para agentes
 
 As regras de navegação, arquitetura, limites e validação obrigatória estão em

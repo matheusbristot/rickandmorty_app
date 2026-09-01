@@ -1,0 +1,193 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: ${{ secrets.FLUTTER_VERSION }}
+
+jobs:
+  validate:
+    name: Analyze, test and Android build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate Flutter version secret
+        env:
+          FLUTTER_VERSION: ${{ env.FLUTTER_VERSION }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$FLUTTER_VERSION" ]]; then
+            echo "::error::The FLUTTER_VERSION GitHub Actions secret is required."
+            exit 1
+          fi
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+          pub-cache: true
+
+      - name: Install dependencies
+        run: make get
+
+      - name: Analyze
+        run: make analyze
+
+      - name: Test
+        run: make test
+
+      - name: Build Android debug
+        run: flutter build apk --debug --flavor dev -t lib/main_dev.dart --dart-define=APP_ENV=dev
+
+  detect-version:
+    name: Detect production version change
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.version.outputs.changed }}
+      value: ${{ steps.version.outputs.value }}
+
+    steps:
+      - name: Checkout history
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - name: Compare pubspec version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          current_version="$(awk '$1 == "version:" { print $2; exit }' pubspec.yaml | tr -d '"')"
+          previous_version="$(git show HEAD^:pubspec.yaml | awk '$1 == "version:" { print $2; exit }' | tr -d '"')"
+
+          if [[ -z "$current_version" || -z "$previous_version" ]]; then
+            echo "::error::Unable to read the version from pubspec.yaml."
+            exit 1
+          fi
+
+          echo "Current version: $current_version"
+          echo "Previous version: $previous_version"
+
+          if [[ "$current_version" != "$previous_version" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "value=$current_version" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "value=$current_version" >> "$GITHUB_OUTPUT"
+          fi
+
+  production-artifact:
+    name: Build production Android artifact
+    if: needs.detect-version.outputs.changed == 'true'
+    needs:
+      - validate
+      - detect-version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate Flutter version secret
+        env:
+          FLUTTER_VERSION: ${{ env.FLUTTER_VERSION }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$FLUTTER_VERSION" ]]; then
+            echo "::error::The FLUTTER_VERSION GitHub Actions secret is required."
+            exit 1
+          fi
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+          pub-cache: true
+
+      - name: Install dependencies
+        run: make get
+
+      - name: Build production APK
+        env:
+          ENV_PRD: ${{ secrets.ENV_PRD }}
+        run: |
+          set -euo pipefail
+
+          api_base_url="$(printf '%s\n' "$ENV_PRD" | awk -F= '$1 == "API_BASE_URL" { value=$0; sub(/^[^=]*=/, "", value); print value; exit }')"
+          if [[ -z "$api_base_url" ]]; then
+            echo "::error::The ENV_PRD secret must define API_BASE_URL."
+            exit 1
+          fi
+
+          flutter build apk --release --flavor prd -t lib/main_prd.dart \
+            --dart-define=APP_ENV=prd \
+            --dart-define=PRD_API_BASE_URL="$api_base_url"
+
+      - name: Upload production APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-prd-${{ needs.detect-version.outputs.value }}
+          path: build/app/outputs/flutter-apk/app-prd-release.apk
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          version="${{ needs.detect-version.outputs.value }}"
+          tag="v${version}"
+          apk_path="build/app/outputs/flutter-apk/app-prd-release.apk"
+
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$tag" "$apk_path" \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+          else
+            gh release create "$tag" "$apk_path" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Android $version" \
+              --generate-notes
+          fi
