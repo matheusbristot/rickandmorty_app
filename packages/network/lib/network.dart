@@ -3,3 +3,7 @@ export 'src/network_client_impl.dart';
 export 'src/network_config.dart';
 export 'src/network_exception.dart';
 export 'src/json_map_extensions.dart';
+export 'src/pagination/paginated_client.dart';
+export 'src/pagination/paginated_client_impl.dart';
+export 'src/pagination/paginated_response.dart';
+export 'src/pagination/pagination_info.dart';

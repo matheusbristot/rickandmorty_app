@@ -45,6 +45,49 @@ A orquestração entre episódio e personagens fica exclusivamente no
 `EpisodeRepositoryImpl`. As regras de fronteiras e responsabilidades estão
 documentadas em `AGENTS.md`.
 
+## Paginação reutilizável
+
+O package `network` exporta `PaginatedClient` e `PaginatedClientImpl`, que
+interpretam o envelope `info/results` usado por characters, locations e
+episodes. Cada chamada retorna `PaginatedResponse<T>` com resultados
+imutáveis e `PaginationInfo` (`count`, `pages`, `next`, `prev`, `hasNext` e
+`hasPrevious`). O consumidor fornece a conversão dos itens:
+
+```dart
+final PaginatedClient pagination = PaginatedClientImpl(networkClient);
+final page = await pagination.getPage<CharacterModel>(
+  'character?name=Rick',
+  page: 1,
+  decodeItem: CharacterModel.fromJson,
+);
+final next = page.info.next;
+if (next != null) {
+  final nextPage = await pagination.getPageUri<CharacterModel>(
+    next,
+    decodeItem: CharacterModel.fromJson,
+  );
+  // Entregue nextPage ao repositório consumidor.
+}
+```
+
+`getPage` recebe um caminho relativo à URL base, preserva filtros e substitui
+o parâmetro `page`. A página padrão é 1; 0 é normalizado para 1 e valores
+negativos são rejeitados antes da requisição. `getPageUri` recebe uma URL
+HTTP(S) absoluta e a utiliza sem alterações, permitindo seguir `next`/`prev`.
+Links nulos indicam ausência de página adjacente; não há busca automática.
+
+O envelope exige contagens inteiras não negativas, links HTTP(S) absolutos
+ou nulos e uma lista de objetos. Dados inválidos geram `FormatException`;
+erros do conversor são propagados. `NetworkException`, timeout e retry
+permanecem sob o cliente HTTP existente. O adaptador não fecha esse cliente.
+
+Data sources futuros devem receber o contrato `PaginatedClient`, composto em
+`lib/core/di`, e converter os itens para seus models. Repositórios continuam
+responsáveis por cache e consistência, enquanto as features definem acúmulo
+de páginas e estado da tela. O adaptador não guarda estado entre chamadas e
+não depende das features. A busca atual de um único episódio não utiliza
+paginação e mantém seu fluxo offline-first.
+
 ## Executar
 
 ```bash
