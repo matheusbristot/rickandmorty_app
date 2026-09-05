@@ -4,8 +4,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:network/network.dart';
 import 'package:test/test.dart';
 
-import '../../support/test_fixtures.dart';
-import '../../support/test_mocks.dart';
+import '../../../../support/test_fixtures.dart';
+import '../../../../support/test_mocks.dart';
 
 void main() {
   late MockNetworkClient network;

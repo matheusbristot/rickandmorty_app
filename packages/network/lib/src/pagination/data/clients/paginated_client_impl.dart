@@ -1,6 +1,8 @@
-import '../network_client.dart';
+import '../../../network_client.dart';
+import '../mappers/paginated_response_mapper.dart';
 import 'paginated_client.dart';
-import 'paginated_response.dart';
+import '../../domain/entities/paginated_response.dart';
+import '../mappers/json_item_decoder.dart';
 
 /// Stateless pagination adapter. The owner retains the client's lifecycle.
 final class PaginatedClientImpl implements PaginatedClient {
@@ -26,7 +28,7 @@ final class PaginatedClientImpl implements PaginatedClient {
       },
     );
     final json = await _client.getJson(pagedUri.toString());
-    return PaginatedResponse<T>.fromJson(json, decodeItem: decodeItem);
+    return PaginatedResponseMapper.fromJson<T>(json, decodeItem: decodeItem);
   }
 
   @override
@@ -44,6 +46,6 @@ final class PaginatedClientImpl implements PaginatedClient {
       );
     }
     final json = await _client.getJsonUri(uri);
-    return PaginatedResponse<T>.fromJson(json, decodeItem: decodeItem);
+    return PaginatedResponseMapper.fromJson<T>(json, decodeItem: decodeItem);
   }
 }

@@ -1,4 +1,5 @@
-import 'paginated_response.dart';
+import '../../domain/entities/paginated_response.dart';
+import '../mappers/json_item_decoder.dart';
 
 abstract interface class PaginatedClient {
   /// Fetches a path relative to the NetworkClient base URL.

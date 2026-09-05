@@ -53,6 +53,12 @@ episodes. Cada chamada retorna `PaginatedResponse<T>` com resultados
 imutáveis e `PaginationInfo` (`count`, `pages`, `next`, `prev`, `hasNext` e
 `hasPrevious`). O consumidor fornece a conversão dos itens:
 
+A paginação separa `domain/entities` (dados imutáveis, sem JSON),
+`data/clients` (contrato e implementação de transporte) e `data/mappers`
+(conversão e validação do envelope). `network_entities.dart` permite importar
+somente as entidades, sem expor clientes HTTP ou conversores. As entidades
+não possuem `fromJson`; o cliente utiliza os mappers internos para criá-las.
+
 ```dart
 final PaginatedClient pagination = PaginatedClientImpl(networkClient);
 final page = await pagination.getPage<CharacterModel>(

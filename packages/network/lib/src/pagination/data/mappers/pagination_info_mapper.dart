@@ -1,21 +1,10 @@
-/// Metadata returned by an API using the info/results pagination envelope.
-final class PaginationInfo {
-  const PaginationInfo({
-    required this.count,
-    required this.pages,
-    required this.next,
-    required this.prev,
-  });
+import '../../domain/entities/pagination_info.dart';
 
-  final int count;
-  final int pages;
-  final Uri? next;
-  final Uri? prev;
+/// Pure conversion from the API metadata to an entity.
+final class PaginationInfoMapper {
+  PaginationInfoMapper._();
 
-  bool get hasNext => next != null;
-  bool get hasPrevious => prev != null;
-
-  factory PaginationInfo.fromJson(Map<String, dynamic> json) {
+  static PaginationInfo fromJson(Map<String, dynamic> json) {
     return PaginationInfo(
       count: _nonNegativeInt(json['count']),
       pages: _nonNegativeInt(json['pages']),

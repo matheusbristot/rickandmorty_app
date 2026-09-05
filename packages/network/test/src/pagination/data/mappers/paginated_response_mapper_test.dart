@@ -1,7 +1,9 @@
-import 'package:network/network.dart';
+import 'package:network/network_entities.dart';
+import 'package:network/src/pagination/data/mappers/paginated_response_mapper.dart';
+import 'package:network/src/pagination/data/mappers/pagination_info_mapper.dart';
 import 'package:test/test.dart';
 
-import '../../support/test_fixtures.dart';
+import '../../../../support/test_fixtures.dart';
 
 void main() {
   for (final scenario in [
@@ -34,7 +36,7 @@ void main() {
       );
 
       // Act
-      final result = PaginatedResponse<String>.fromJson(
+      final result = PaginatedResponseMapper.fromJson<String>(
         json,
         decodeItem: (item) => item['name'] as String,
       );
@@ -55,7 +57,7 @@ void main() {
     final json = paginatedJson(count: 0, pages: 0, results: []);
 
     // Act
-    final result = PaginatedResponse<int>.fromJson(
+    final result = PaginatedResponseMapper.fromJson<int>(
       json,
       decodeItem: (_) => throw StateError('Unexpected decoding'),
     );
@@ -64,20 +66,6 @@ void main() {
     expect(result.results, isEmpty);
     expect(result.info.count, 0);
     expect(result.info.pages, 0);
-  });
-
-  test('copies results and prevents mutations', () {
-    // Arrange
-    final source = [1];
-    final info = PaginationInfo.fromJson(paginatedJson()['info']);
-
-    // Act
-    final result = PaginatedResponse(info: info, results: source);
-    source.add(2);
-
-    // Assert
-    expect(result.results, [1]);
-    expect(() => result.results.add(3), throwsUnsupportedError);
   });
 
   final invalidEnvelopes = <Object?>[
@@ -97,7 +85,7 @@ void main() {
       final json = invalidEnvelopes[i];
 
       // Act
-      Object decode() => PaginatedResponse<int>.fromJson(
+      Object decode() => PaginatedResponseMapper.fromJson<int>(
         json,
         decodeItem: (item) => item['id'] as int,
       );
@@ -124,7 +112,7 @@ void main() {
         json[key] = value;
 
         // Act
-        PaginationInfo decode() => PaginationInfo.fromJson(json);
+        PaginationInfo decode() => PaginationInfoMapper.fromJson(json);
 
         // Assert
         expect(decode, throwsFormatException);
@@ -136,7 +124,7 @@ void main() {
       json.remove(key);
 
       // Act
-      PaginationInfo decode() => PaginationInfo.fromJson(json);
+      PaginationInfo decode() => PaginationInfoMapper.fromJson(json);
 
       // Assert
       expect(decode, throwsFormatException);
@@ -149,8 +137,10 @@ void main() {
     final json = paginatedJson();
 
     // Act
-    Object decode() =>
-        PaginatedResponse<int>.fromJson(json, decodeItem: (_) => throw failure);
+    Object decode() => PaginatedResponseMapper.fromJson<int>(
+      json,
+      decodeItem: (_) => throw failure,
+    );
 
     // Assert
     expect(decode, throwsA(same(failure)));
