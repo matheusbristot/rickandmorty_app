@@ -1,6 +1,10 @@
 import 'package:cache/cache.dart';
 import 'package:character/character_data.dart';
 import 'package:network/network.dart';
+
+import '../../features/character_catalog/presentation/viewmodels/character_catalog_view_model.dart';
+import 'character_catalog_dependencies.dart' as catalog;
+
 import 'package:rickandmorty_app/features/episode/data/datasources/episode_local_data_source.dart';
 import 'package:rickandmorty_app/features/episode/data/datasources/local/episode_local_data_source_impl.dart';
 import 'package:rickandmorty_app/features/episode/data/datasources/episode_remote_data_source.dart';
@@ -17,7 +21,12 @@ import '../environment/app_environment.dart';
 import '../environment/fixture_network_client_impl.dart';
 
 class AppDependencies {
-  AppDependencies._({required this.episodeRepository});
+  AppDependencies._({
+    required this.episodeRepository,
+    required this.catalogViewModel,
+  });
+
+  final CharacterCatalogViewModel catalogViewModel;
 
   final EpisodeRepository episodeRepository;
 
@@ -30,28 +39,40 @@ class AppDependencies {
     );
   }
 
-  static AppDependencies create(AppEnvironmentConfig config) {
+  static AppDependencies create(AppEnvironmentConfig config, {Cache? cache}) {
     final NetworkClient networkClient = config.usesFixtures
         ? FixtureNetworkClientImpl(fixtureRoot: config.fixtureRoot!)
         : NetworkClientImpl(config: NetworkConfig(baseUrl: config.apiBaseUrl));
+    final Cache storage = cache ?? SharedPreferencesCacheImpl();
+    return AppDependencies._(
+      catalogViewModel: catalog.createCharacterCatalogViewModel(
+        networkClient,
+        storage,
+        catalog.characterCatalogCacheScope(config),
+      ),
+      episodeRepository: _episodeRepository(networkClient, storage),
+    );
+  }
+
+  static EpisodeRepository _episodeRepository(
+    NetworkClient networkClient,
+    Cache cache,
+  ) {
     final CharacterRemoteDataSource characterDataSource =
         CharacterRemoteDataSourceImpl(networkClient);
     final CharacterRepository characterRepository = CharacterRepositoryImpl(
       characterDataSource,
     );
-    final Cache cache = SharedPreferencesCacheImpl();
     final EpisodeLocalDataSource localDataSource = EpisodeLocalDataSourceImpl(
       cache,
     );
     final EpisodeRemoteDataSource remoteDataSource =
         EpisodeRemoteDataSourceImpl(networkClient);
 
-    return AppDependencies._(
-      episodeRepository: EpisodeRepositoryImpl(
-        localDataSource,
-        remoteDataSource,
-        characterRepository,
-      ),
+    return EpisodeRepositoryImpl(
+      localDataSource,
+      remoteDataSource,
+      characterRepository,
     );
   }
 }
