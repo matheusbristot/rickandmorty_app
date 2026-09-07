@@ -3,5 +3,7 @@
   "name": "Rick Sanchez (DEV)",
   "status": "Alive",
   "species": "Human",
-  "image": ""
+  "image": "",
+  "gender": "Male",
+  "type": ""
 }

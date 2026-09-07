@@ -1,9 +1,21 @@
 import 'package:character/character.dart';
+import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_page.dart';
 import 'package:rickandmorty_app/features/episode/data/models/episode_model.dart';
 import 'package:rickandmorty_app/features/episode/domain/entities/episode.dart';
 
 final class TestFixtures {
   const TestFixtures._();
+
+  static CharacterPage catalogPage({
+    int id = 1,
+    String name = 'Rick Sanchez',
+    Uri? next,
+    int count = 3,
+  }) => CharacterPage(
+    characters: [character(id, name)],
+    count: count,
+    next: next,
+  );
 
   static Uri characterUrl(int id) =>
       Uri.parse('https://rickandmortyapi.com/api/character/$id');

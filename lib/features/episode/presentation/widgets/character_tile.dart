@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:character/character.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/presentation/widgets/character_list_card.dart';
 import '../state/episode_screen_state.dart';
 
 final class CharacterTile extends StatelessWidget {
@@ -41,50 +41,6 @@ final class CharacterTile extends StatelessWidget {
     }
 
     final character = item.character!;
-    final image = character.imageUrl.isEmpty
-        ? const CharacterImageFallback()
-        : CachedNetworkImage(
-            imageUrl: character.imageUrl,
-            cacheKey: 'character_${character.id}',
-            fit: BoxFit.cover,
-            placeholder: (context, url) =>
-                const CharacterImageFallback(showProgress: true),
-            errorWidget: (context, url, error) =>
-                const CharacterImageFallback(),
-          );
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        leading: SizedBox(width: 54, height: 54, child: ClipOval(child: image)),
-        title: Text(
-          character.name,
-          style: const TextStyle(fontWeight: FontWeight.w700),
-        ),
-        subtitle: Text('${character.species} • ${character.status}'),
-      ),
-    );
-  }
-}
-
-final class CharacterImageFallback extends StatelessWidget {
-  const CharacterImageFallback({this.showProgress = false, super.key});
-
-  final bool showProgress;
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: const Color(0xFFE6EFED),
-      child: Center(
-        child: showProgress
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : const Icon(Icons.person_outline),
-      ),
-    );
+    return CharacterListCard(character: character);
   }
 }
