@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:rickandmorty_app/features/episode/data/datasources/local/episode_local_data_source_impl.dart';
+import 'package:episode_feature/data/datasources/local/episode_local_data_source_impl.dart';
 
 import '../../../../support/test_mocks.dart';
 

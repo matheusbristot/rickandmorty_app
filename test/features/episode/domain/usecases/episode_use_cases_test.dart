@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode_load_event.dart';
-import 'package:rickandmorty_app/features/episode/domain/usecases/load_episode_use_case.dart';
+import 'package:episode_feature/domain/entities/episode_load_event.dart';
+import 'package:episode_feature/domain/usecases/load_episode_use_case.dart';
 
 import '../../../../support/test_fixtures.dart';
 import '../../../../support/test_mocks.dart';

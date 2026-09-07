@@ -2,10 +2,10 @@ import 'package:character/character.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network/network.dart';
-import 'package:rickandmorty_app/features/episode/data/models/episode_model.dart';
-import 'package:rickandmorty_app/features/episode/data/repositories/episode_repository_impl.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode_failure.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode_load_event.dart';
+import 'package:episode_feature/data/models/episode_model.dart';
+import 'package:episode_feature/data/repositories/episode_repository_impl.dart';
+import 'package:episode_feature/domain/entities/episode_failure.dart';
+import 'package:episode_feature/domain/entities/episode_load_event.dart';
 
 import '../../../../support/test_fixtures.dart';
 import '../../../../support/test_mocks.dart';

@@ -1,12 +1,12 @@
 import 'package:character/character.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode_load_event.dart';
-import 'package:rickandmorty_app/features/episode/domain/usecases/load_episode_use_case.dart';
-import 'package:rickandmorty_app/features/episode/domain/usecases/retry_character_use_case.dart';
-import 'package:rickandmorty_app/features/episode/presentation/input/episode_input_parser.dart';
-import 'package:rickandmorty_app/features/episode/presentation/messages/episode_message_mapper.dart';
-import 'package:rickandmorty_app/features/episode/presentation/viewmodels/episode_view_model.dart';
+import 'package:episode_feature/domain/entities/episode_load_event.dart';
+import 'package:episode_feature/domain/usecases/load_episode_use_case.dart';
+import 'package:episode_feature/domain/usecases/retry_character_use_case.dart';
+import 'package:episode_feature/presentation/input/episode_input_parser.dart';
+import 'package:episode_feature/presentation/messages/episode_message_mapper.dart';
+import 'package:episode_feature/presentation/viewmodels/episode_view_model.dart';
 
 import '../../../../support/test_fixtures.dart';
 import '../../../../support/test_mocks.dart';

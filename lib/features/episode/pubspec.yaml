@@ -1,0 +1,20 @@
+name: episode_feature
+description: Episode feature package for the Rick and Morty app.
+publish_to: none
+
+resolution: workspace
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  app_ui:
+    path: ../../../packages/app_ui
+  cache:
+    path: ../../../packages/cache
+  character:
+    path: ../../../packages/character
+  flutter:
+    sdk: flutter
+  network:
+    path: ../../../packages/network

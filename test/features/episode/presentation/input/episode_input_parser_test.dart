@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rickandmorty_app/features/episode/presentation/input/episode_input_parser.dart';
+import 'package:episode_feature/presentation/input/episode_input_parser.dart';
 
 void main() {
   test('converte um número de episódio válido', () {

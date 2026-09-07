@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_filter.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_page.dart';
-import 'package:rickandmorty_app/features/character_catalog/presentation/viewmodels/character_catalog_view_model.dart';
+import 'package:character_catalog_feature/domain/entities/character_filter.dart';
+import 'package:character_catalog_feature/domain/entities/character_page.dart';
+import 'package:character_catalog_feature/presentation/viewmodels/character_catalog_view_model.dart';
 
 import '../../../support/test_fixtures.dart';
 import '../../../support/test_mocks.dart';

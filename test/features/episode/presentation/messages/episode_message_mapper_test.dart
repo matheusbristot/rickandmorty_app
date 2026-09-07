@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode_failure.dart';
-import 'package:rickandmorty_app/features/episode/presentation/messages/episode_message_mapper.dart';
+import 'package:episode_feature/domain/entities/episode_failure.dart';
+import 'package:episode_feature/presentation/messages/episode_message_mapper.dart';
 
 void main() {
   test('converte falhas de domínio em mensagens da apresentação', () {

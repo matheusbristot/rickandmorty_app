@@ -6,6 +6,14 @@ version: 1.1.0
 environment:
   sdk: ^3.13.2
 
+workspace:
+  - packages/app_ui
+  - packages/cache
+  - packages/character
+  - packages/network
+  - lib/features/character_catalog
+  - lib/features/episode
+
 dependencies:
   cached_network_image: ^4.0.0
   flutter:
@@ -15,8 +23,14 @@ dependencies:
     path: packages/character
   cache:
     path: packages/cache
+  app_ui:
+    path: packages/app_ui
+  character_catalog_feature:
+    path: lib/features/character_catalog
   network:
     path: packages/network
+  episode_feature:
+    path: lib/features/episode
 
   cupertino_icons: ^1.0.8
 

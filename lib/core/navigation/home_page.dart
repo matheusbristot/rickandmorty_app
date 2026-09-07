@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../features/character_catalog/presentation/pages/character_catalog_page.dart';
-import '../../features/character_catalog/presentation/viewmodels/character_catalog_view_model.dart';
-import '../../features/episode/presentation/pages/episode_page.dart';
-import '../../features/episode/presentation/viewmodels/episode_view_model.dart';
+import 'package:character_catalog_feature/character_catalog.dart';
+import 'package:episode_feature/episode.dart';
 
 final class HomePage extends StatefulWidget {
   const HomePage({required this.catalog, required this.episode, super.key});

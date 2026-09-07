@@ -2,15 +2,15 @@ import 'package:cache/cache.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network/network.dart';
 import 'package:character/character_data.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_filter.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_page.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/repositories/character_catalog_repository.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/usecases/load_character_catalog.dart';
-import 'package:rickandmorty_app/features/character_catalog/data/datasources/character_catalog_remote.dart';
-import 'package:rickandmorty_app/features/character_catalog/data/datasources/character_catalog_local.dart';
-import 'package:rickandmorty_app/features/episode/data/datasources/episode_local_data_source.dart';
-import 'package:rickandmorty_app/features/episode/data/datasources/episode_remote_data_source.dart';
-import 'package:rickandmorty_app/features/episode/domain/repositories/episode_repository.dart';
+import 'package:character_catalog_feature/domain/entities/character_filter.dart';
+import 'package:character_catalog_feature/domain/entities/character_page.dart';
+import 'package:character_catalog_feature/domain/repositories/character_catalog_repository.dart';
+import 'package:character_catalog_feature/domain/usecases/load_character_catalog.dart';
+import 'package:character_catalog_feature/data/datasources/character_catalog_remote.dart';
+import 'package:character_catalog_feature/data/datasources/character_catalog_local.dart';
+import 'package:episode_feature/data/datasources/episode_local_data_source.dart';
+import 'package:episode_feature/data/datasources/episode_remote_data_source.dart';
+import 'package:episode_feature/domain/repositories/episode_repository.dart';
 
 import 'test_fixtures.dart';
 

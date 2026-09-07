@@ -1,8 +1,8 @@
 import 'package:character/character.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode_load_event.dart';
-import 'package:rickandmorty_app/features/episode/presentation/state/episode_screen_state.dart';
+import 'package:episode_feature/domain/entities/episode.dart';
+import 'package:episode_feature/domain/entities/episode_load_event.dart';
+import 'package:episode_feature/presentation/state/episode_screen_state.dart';
 
 import '../../../../support/test_fixtures.dart';
 

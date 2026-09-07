@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_filter.dart';
-import 'package:rickandmorty_app/features/character_catalog/presentation/widgets/character_filters.dart';
+import 'package:character_catalog_feature/domain/entities/character_filter.dart';
+import 'package:character_catalog_feature/presentation/widgets/character_filters.dart';
 
 void main() {
   testWidgets('combina cinco filtros e limpa valores e seleções', (
