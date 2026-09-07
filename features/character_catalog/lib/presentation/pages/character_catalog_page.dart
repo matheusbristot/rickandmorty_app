@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:app_ui/app_ui.dart';
 
-import '../../../../core/presentation/widgets/character_list_card.dart';
 import '../viewmodels/character_catalog_view_model.dart';
 import '../widgets/catalog_feedback.dart';
 import '../widgets/character_filters.dart';

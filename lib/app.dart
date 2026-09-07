@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:character_catalog_feature/character_catalog.dart';
+import 'package:episode_feature/episode.dart';
 
 import 'core/di/app_dependencies.dart';
 import 'core/environment/app_environment.dart';
 import 'core/navigation/home_page.dart';
-import 'features/character_catalog/presentation/viewmodels/character_catalog_view_model.dart';
-import 'features/episode/presentation/pages/episode_page.dart';
-import 'features/episode/presentation/viewmodels/episode_view_model.dart';
 
 Future<void> bootstrap(AppEnvironment environment) async {
   WidgetsFlutterBinding.ensureInitialized();

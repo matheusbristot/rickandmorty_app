@@ -2,6 +2,8 @@ name: character
 description: Character domain and data package for the Rick and Morty app.
 publish_to: none
 
+resolution: workspace
+
 environment:
   sdk: ^3.13.2
 

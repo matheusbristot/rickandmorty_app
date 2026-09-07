@@ -1,0 +1,15 @@
+name: app_ui
+description: Shared Flutter presentation components for the Rick and Morty app.
+publish_to: none
+
+resolution: workspace
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  cached_network_image: ^4.0.0
+  character:
+    path: ../character
+  flutter:
+    sdk: flutter

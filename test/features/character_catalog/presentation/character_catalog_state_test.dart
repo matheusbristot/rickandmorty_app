@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_page.dart';
-import 'package:rickandmorty_app/features/character_catalog/presentation/state/character_catalog_state.dart';
+import 'package:character_catalog_feature/domain/entities/character_page.dart';
+import 'package:character_catalog_feature/presentation/state/character_catalog_state.dart';
 
 import '../../../support/test_fixtures.dart';
 

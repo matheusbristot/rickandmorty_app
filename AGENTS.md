@@ -21,9 +21,10 @@ Mapa rápido:
 
 ```text
 lib/core/di/                         composição e injeção de dependências
-lib/features/episode/domain/         entidades, contratos e casos de uso
-lib/features/episode/data/           models, repositórios e data sources
-lib/features/episode/presentation/   estado, ViewModel e widgets
+features/episode/lib/domain/        entidades, contratos e casos de uso
+features/episode/lib/data/          models, repositórios e data sources
+features/episode/lib/presentation/ estado, ViewModel e widgets
+packages/app_ui/                     widgets Flutter compartilhados
 packages/network/                    HTTP, JSON e erros de rede reutilizáveis
 packages/cache/                      contrato de cache e SharedPreferences
 packages/character/                  carregamento e contrato de personagens
@@ -51,6 +52,15 @@ presentation → domain ← data
   múltiplas fontes e casos de negócio.
 - `lib/core/di` é o composition root. A construção de implementações concretas
   deve ficar concentrada ali, salvo composição interna de um package.
+- Toda feature direta em `features/<feature_name>` deve ter
+  `lib/core/di/<feature_name>_dependencies.dart`, mesmo sem `pubspec.yaml`, e
+  esse arquivo deve ser importado por `lib/core/di/app_dependencies.dart`. A
+  regra é verificada por `make validate-feature-dependencies`.
+- Features são packages Flutter reais: devem possuir `pubspec.yaml`, uma
+  biblioteca pública em `lib/<feature_name>.dart` e uma dependência de caminho
+  correspondente no `pubspec.yaml` da aplicação. O código da feature não pode
+  importar `package:rickandmorty_app` nem depender do package da aplicação, para
+  evitar ciclo com `core`.
 - `packages/cache` é o único local autorizado a importar
   `shared_preferences`.
 
@@ -100,7 +110,7 @@ URL ou o ID. Nunca use índice de lista para correlacionar requests e respostas.
   não deve conter código de widget.
 - Casos de uso representam uma ação do domínio e devem ser pequenos e
   testáveis sem Flutter.
-- Packages reutilizáveis não podem depender de `lib/features` da aplicação.
+- Packages reutilizáveis não podem depender de `features` da aplicação.
 
 ## Limites objetivos
 

@@ -2,6 +2,8 @@ name: cache
 description: Local key-value cache abstraction and SharedPreferences implementation.
 publish_to: none
 
+resolution: workspace
+
 environment:
   sdk: ^3.13.2
 

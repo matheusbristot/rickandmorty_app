@@ -2,6 +2,8 @@ name: network
 description: Reusable HTTP/JSON client configuration for the application.
 publish_to: none
 
+resolution: workspace
+
 environment:
   sdk: ^3.13.2
 

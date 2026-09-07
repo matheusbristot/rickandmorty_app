@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:rickandmorty_app/core/di/character_catalog_dependencies.dart';
 import 'package:rickandmorty_app/core/environment/app_environment.dart';
-import 'package:rickandmorty_app/features/character_catalog/data/datasources/character_catalog_local_impl.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_filter.dart';
+import 'package:character_catalog_feature/data/datasources/character_catalog_local_impl.dart';
+import 'package:character_catalog_feature/domain/entities/character_filter.dart';
 
 import '../../support/test_mocks.dart';
 

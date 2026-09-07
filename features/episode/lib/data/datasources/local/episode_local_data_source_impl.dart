@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:cache/cache.dart';
-import 'package:rickandmorty_app/features/episode/data/datasources/episode_local_data_source.dart';
-import 'package:rickandmorty_app/features/episode/data/models/episode_model.dart';
+
+import '../episode_local_data_source.dart';
+import '../../models/episode_model.dart';
 
 final class EpisodeLocalDataSourceImpl implements EpisodeLocalDataSource {
   EpisodeLocalDataSourceImpl(this._cache);

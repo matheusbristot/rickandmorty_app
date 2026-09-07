@@ -1,7 +1,7 @@
 import 'package:character/character.dart';
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/presentation/widgets/character_list_card.dart';
 import '../state/episode_screen_state.dart';
 
 final class CharacterTile extends StatelessWidget {

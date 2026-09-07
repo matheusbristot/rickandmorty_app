@@ -1,7 +1,7 @@
 import 'package:character/character.dart';
-import 'package:rickandmorty_app/features/character_catalog/domain/entities/character_page.dart';
-import 'package:rickandmorty_app/features/episode/data/models/episode_model.dart';
-import 'package:rickandmorty_app/features/episode/domain/entities/episode.dart';
+import 'package:character_catalog_feature/domain/entities/character_page.dart';
+import 'package:episode_feature/data/models/episode_model.dart';
+import 'package:episode_feature/domain/entities/episode.dart';
 
 final class TestFixtures {
   const TestFixtures._();

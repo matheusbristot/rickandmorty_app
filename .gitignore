@@ -52,3 +52,6 @@ app.*.map.json
 .env.prd
 
 packages/**/.dart_tool/
+.vscode/
+lib/features/**/pubspec.lock
+packages/**/pubspec.lock

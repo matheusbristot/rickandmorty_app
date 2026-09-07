@@ -1,10 +1,8 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:character/character.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rickandmorty_app/core/presentation/widgets/character_avatar.dart';
-import 'package:rickandmorty_app/core/presentation/widgets/character_image_fallback.dart';
-import 'package:rickandmorty_app/core/presentation/widgets/character_list_card.dart';
 
 void main() {
   testWidgets('padroniza os dados e o fallback visual do personagem', (
