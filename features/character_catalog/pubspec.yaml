@@ -9,12 +9,12 @@ environment:
 
 dependencies:
   app_ui:
-    path: ../../../packages/app_ui
+    path: ../../packages/app_ui
   cache:
-    path: ../../../packages/cache
+    path: ../../packages/cache
   character:
-    path: ../../../packages/character
+    path: ../../packages/character
   flutter:
     sdk: flutter
   network:
-    path: ../../../packages/network
+    path: ../../packages/network

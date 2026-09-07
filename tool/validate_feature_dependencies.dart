@@ -242,7 +242,7 @@ bool _importsFile(List<String> lines, String fileName) {
 
 void main() {
   final issues = validateFeatureDependencies(
-    featuresDirectory: Directory('lib/features'),
+    featuresDirectory: Directory('features'),
     diDirectory: Directory('lib/core/di'),
     appDependenciesFile: File('lib/core/di/app_dependencies.dart'),
     rootPubspecFile: File('pubspec.yaml'),

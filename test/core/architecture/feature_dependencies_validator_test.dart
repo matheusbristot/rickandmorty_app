@@ -27,14 +27,14 @@ dependencies:
     _write(paths.featureEntrypoint, 'library payments_feature;');
     _write(
       paths.featureDependencies,
-      "import '../features/payments/domain.dart';",
+      "import '../../features/payments/domain.dart';",
     );
     _write(paths.appDependencies, "import 'payments_dependencies.dart';");
     _write(paths.rootPubspec, '''name: test_app
 
 dependencies:
   payments_feature:
-    path: lib/features/payments
+    path: features/payments
 ''');
 
     // Act
@@ -164,7 +164,7 @@ dependencies:
 }
 
 _ProjectPaths _createProject(Directory root, {required String featureName}) {
-  final featuresDirectory = Directory('${root.path}/lib/features')
+  final featuresDirectory = Directory('${root.path}/features')
     ..createSync(recursive: true);
   final diDirectory = Directory('${root.path}/lib/core/di')
     ..createSync(recursive: true);
@@ -201,7 +201,7 @@ String _rootPubspec() {
 
 dependencies:
   payments_feature:
-    path: lib/features/payments
+    path: features/payments
 ''';
 }
 

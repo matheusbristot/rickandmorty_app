@@ -30,7 +30,7 @@ salvas usando Carregar mais mesmo se a atualização falhar. Falhas de gravaçã
 do cache não impedem exibir uma resposta remota. O catálogo não baixa todas as
 páginas antecipadamente. Mudanças de filtros descartam respostas anteriores.
 
-A feature fica em `lib/features/character_catalog`, com contratos e entidades
+A feature fica em `features/character_catalog`, com contratos e entidades
 de domínio, caso de uso, fontes local/remota, repositório e estado da apresentação.
 A fonte remota utiliza `PaginatedClient`; a ViewModel recebe apenas o caso de
 uso. A composição fica em `lib/core/di`. O plano está em
@@ -56,12 +56,15 @@ por página, com os mesmos filtros; em prd, a API fornece os totais e links.
 ```text
 lib/
 ├── core/di/                         # composição das dependências
-└── features/<feature>/              # packages Flutter independentes
+└── ...                              # entrada e código da aplicação
+features/
+└── <feature>/                       # package Flutter independente
     └── lib/                         # data, domain e presentation da feature
-packages/app_ui/                    # widgets Flutter compartilhados
-packages/character/                 # domínio e requests de personagens
-packages/network/                   # cliente HTTP/JSON reutilizável
-packages/cache/                     # contrato de cache e implementação local
+packages/
+├── app_ui/                          # widgets Flutter compartilhados
+├── character/                       # domínio e requests de personagens
+├── network/                         # cliente HTTP/JSON reutilizável
+└── cache/                           # contrato de cache e implementação local
 ```
 
 Os testes específicos de cada package ficam em `packages/<nome>/test`; a
@@ -83,7 +86,7 @@ documentadas em `AGENTS.md`.
 
 ## Composição obrigatória de features
 
-Toda pasta direta em `lib/features/<feature_name>` deve possuir
+Toda pasta direta em `features/<feature_name>` deve possuir
 `lib/core/di/<feature_name>_dependencies.dart`. O arquivo precisa ser importado
 por `lib/core/di/app_dependencies.dart`, mantendo a composição no composition
 root.

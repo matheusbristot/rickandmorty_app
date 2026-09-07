@@ -2,7 +2,7 @@ SHELL := /bin/sh
 
 FLUTTER ?= flutter
 DART ?= dart
-FORMAT_TARGETS := lib test packages
+FORMAT_TARGETS := lib test packages features
 PRD_API_BASE_URL ?=
 
 .PHONY: help get validate-feature-dependencies analyze format format-check test flutter-test dart-test \

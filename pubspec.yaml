@@ -11,8 +11,8 @@ workspace:
   - packages/cache
   - packages/character
   - packages/network
-  - lib/features/character_catalog
-  - lib/features/episode
+  - features/character_catalog
+  - features/episode
 
 dependencies:
   cached_network_image: ^4.0.0
@@ -26,11 +26,11 @@ dependencies:
   app_ui:
     path: packages/app_ui
   character_catalog_feature:
-    path: lib/features/character_catalog
+    path: features/character_catalog
   network:
     path: packages/network
   episode_feature:
-    path: lib/features/episode
+    path: features/episode
 
   cupertino_icons: ^1.0.8
 
