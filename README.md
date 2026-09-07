@@ -1,6 +1,43 @@
 # Rick & Morty Episodes
 
-Aplicação Flutter offline-first para consultar um episódio da [Rick and Morty API](https://rickandmortyapi.com/documentation#get-a-single-episode) pelo número e listar seus personagens em ordem alfabética.
+Aplicação Flutter offline-first para explorar personagens e consultar episódios
+da [Rick and Morty API](https://rickandmortyapi.com/documentation).
+
+## Catálogo de personagens
+
+- A aba inicial **Personagens** carrega a primeira página automaticamente.
+- Busque por nome e abra **Filtros** para abrir o bottom sheet e combinar status,
+  espécie, tipo e gênero. Espécie e tipo aceitam os termos da API (por exemplo,
+  Human e Parasite).
+- **Aplicar** reinicia a consulta na primeira página e mostra chips dos filtros
+  ativos; **Limpar** remove todos os filtros. Fechar sem aplicar ou aplicar os
+  mesmos filtros não dispara uma nova consulta.
+- **Carregar mais** segue a próxima página sem duplicar personagens por ID.
+- O ícone de atualização e o gesto de puxar recarregam a consulta atual.
+- Resultados vazios, carregamento, fim da lista e erros possuem estados próprios.
+  **Tentar novamente** repete a página que falhou, mantendo os itens disponíveis.
+- A aba **Episódios** mantém a consulta por número. Trocar de aba preserva o estado.
+
+O cache do catálogo é separado por endpoint (incluindo ambiente), filtros e
+número da página. Por exemplo:
+`["https://rickandmortyapi.com/api/character",{"status":"alive"},3]`.
+A primeira página usa o número 1. O diretório de fixtures permanece no scope
+em dev/stg. Não há prefixo adicional nem URL de continuação na chave; o link
+completo de próxima página permanece no conteúdo salvo para navegação. Dados
+salvos aparecem antes da atualização remota; offline, somente consultas e
+páginas já visitadas ficam disponíveis. É possível continuar pelas páginas
+salvas usando Carregar mais mesmo se a atualização falhar. Falhas de gravação
+do cache não impedem exibir uma resposta remota. O catálogo não baixa todas as
+páginas antecipadamente. Mudanças de filtros descartam respostas anteriores.
+
+A feature fica em `lib/features/character_catalog`, com contratos e entidades
+de domínio, caso de uso, fontes local/remota, repositório e estado da apresentação.
+A fonte remota utiliza `PaginatedClient`; a ViewModel recebe apenas o caso de
+uso. A composição fica em `lib/core/di`. O plano está em
+[`docs/character-catalog-plan.md`](docs/character-catalog-plan.md).
+
+Em dev/stg, os três personagens de demonstração são paginados em duas entradas
+por página, com os mesmos filtros; em prd, a API fornece os totais e links.
 
 ## Comportamento
 
@@ -108,11 +145,16 @@ ambientes `dev` e `stg` carregam fixtures locais em
 
 ```bash
 make run-stg
-make run-prd
+make run-prd-local
 
 # build local do APK de produção usando .env.prd
 make build-prd-local
 ```
+
+`make run-prd-local` é o atalho para abrir a aplicação em produção local.
+Ele lê `API_BASE_URL` de `.env.prd`, injeta o valor como
+`PRD_API_BASE_URL` e executa o flavor `prd` sem exigir export manual no shell.
+`make run-prd` continua como alias do mesmo fluxo para compatibilidade.
 
 Os comandos de execução usam `--dart-define=APP_ENV=...` e permitem passar
 outros parâmetros ao Flutter conforme necessário. Os principais atalhos do
