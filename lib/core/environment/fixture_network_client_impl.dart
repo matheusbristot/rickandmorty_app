@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:network/network.dart';
 
+import 'fixture_character_pages.dart';
+
 final class FixtureNetworkClientImpl implements NetworkClient {
   FixtureNetworkClientImpl({required this.fixtureRoot, AssetBundle? bundle})
     : _bundle = bundle ?? rootBundle;
@@ -13,7 +15,7 @@ final class FixtureNetworkClientImpl implements NetworkClient {
   @override
   Future<dynamic> getJson(String path) {
     final normalizedPath = path.startsWith('/') ? path.substring(1) : path;
-    return _getResource(Uri(path: normalizedPath));
+    return _getResource(Uri.parse(normalizedPath));
   }
 
   @override
@@ -25,6 +27,11 @@ final class FixtureNetworkClientImpl implements NetworkClient {
   Future<dynamic> _getResource(Uri uri) {
     final segments = uri.pathSegments;
     final resourceIndex = _resourceIndex(segments);
+    if (resourceIndex >= 0 &&
+        segments[resourceIndex] == 'character' &&
+        segments.skip(resourceIndex + 1).every((segment) => segment.isEmpty)) {
+      return FixtureCharacterPagesImpl(_bundle, fixtureRoot).load(uri);
+    }
     if (resourceIndex < 0 || resourceIndex + 1 >= segments.length) {
       throw const FormatException('URL de fixture inválida.');
     }

@@ -3,5 +3,7 @@
   "name": "Rick Sanchez (STG)",
   "status": "Alive",
   "species": "Human",
-  "image": ""
+  "image": "",
+  "gender": "Male",
+  "type": ""
 }
