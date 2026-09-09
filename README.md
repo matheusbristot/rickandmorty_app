@@ -213,6 +213,21 @@ flavor `prd`, publica o arquivo como artefato do GitHub Actions por 90 dias e
 cria uma GitHub Release publicada com o APK anexado. A tag da release segue o
 formato `v<versão>`, como `v1.0.0`.
 
+O workflow **Rick Review** revisa automaticamente pull requests não rascunho
+quando são abertas, reabertas, recebem novos commits ou ficam prontas para
+review. Ele lê o `AGENTS.md` da base, analisa somente o diff da pull request e
+publica um comentário idempotente com a persona do Rick; novos commits
+atualizam o comentário anterior. Para ativá-lo, configure o secret
+`OPENAI_API_KEY` no repositório. Opcionalmente, defina a variável de Actions
+`OPENAI_REVIEW_MODEL` para trocar o modelo padrão (`gpt-5`). O job também pode
+ser reexecutado manualmente informando o número da pull request em
+**Actions → Rick Review → Run workflow**. A chave nunca é passada para código
+da branch da pull request. Antes da chamada externa, o workflow bloqueia o
+envio quando um arquivo sensível é alterado ou quando o scanner determinístico
+encontra padrões claros de API keys, tokens, URLs de banco ou chaves privadas no
+diff. A política completa para agentes está em `AGENTS.md`; o bloqueio é uma
+barreira adicional e não substitui rotação imediata de uma credencial suspeita.
+
 Os ambientes são definidos por `--dart-define` no momento do build e não são
 assets do aplicativo. O job de produção não publica na Google Play e usa a
 assinatura debug existente no projeto. Configure o secret `ENV_PRD` no GitHub
