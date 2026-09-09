@@ -36,6 +36,7 @@ class AppDependencies {
       episodeRepository: episode.createEpisodeRepository(
         networkClient,
         storage,
+        episode.episodeCacheScope(config),
       ),
     );
   }

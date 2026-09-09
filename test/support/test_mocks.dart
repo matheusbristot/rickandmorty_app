@@ -16,6 +16,8 @@ import 'test_fixtures.dart';
 
 class MockCache extends Mock implements Cache {}
 
+final class MockNetworkClient extends Mock implements NetworkClient {}
+
 final class MockPaginatedClient extends Mock implements PaginatedClient {}
 
 final class MockCatalogRemote extends Mock implements CharacterCatalogRemote {}

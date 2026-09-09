@@ -43,7 +43,9 @@ por página, com os mesmos filtros; em prd, a API fornece os totais e links.
 
 - Informe o número do episódio e toque em **Buscar**.
 - O episódio e todos os personagens são carregados pela API REST JSON.
-- O resultado completo é salvo localmente por número de episódio.
+- O resultado completo é salvo localmente por endpoint (incluindo ambiente) e
+  número de episódio. Por exemplo:
+  `["https://rickandmortyapi.com/api/episode",3]`.
 - O episódio concluído é salvo localmente mesmo quando algum personagem falha; os personagens disponíveis permanecem no cache para uso offline e nova tentativa.
 - Em uma nova consulta, o cache aparece imediatamente e é atualizado em segundo plano.
 - Sem conexão, a última versão salva continua disponível.
@@ -77,8 +79,9 @@ O package `cache` fornece a abstração de armazenamento chave-valor usada pela
 fonte local de episódios. Sua implementação padrão usa
 `SharedPreferencesAsync`; a dependência concreta fica montada no composition
 root (`lib/core/di`), enquanto a feature depende apenas do contrato `Cache`.
-Os episódios são persistidos como JSON por número, permitindo exibição
-imediata do cache, atualização em segundo plano e funcionamento offline.
+Os episódios são persistidos como JSON por endpoint (incluindo ambiente) e
+número, permitindo exibição imediata do cache, atualização em segundo plano e
+funcionamento offline.
 
 A orquestração entre episódio e personagens fica exclusivamente no
 `EpisodeRepositoryImpl`. As regras de fronteiras e responsabilidades estão

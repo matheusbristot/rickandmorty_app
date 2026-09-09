@@ -7,9 +7,10 @@ import '../episode_local_data_source.dart';
 import '../../models/episode_model.dart';
 
 final class EpisodeLocalDataSourceImpl implements EpisodeLocalDataSource {
-  EpisodeLocalDataSourceImpl(this._cache);
+  EpisodeLocalDataSourceImpl(this._cache, {required this.scope});
 
   final Cache _cache;
+  final String scope;
 
   @override
   Future<EpisodeModel?> getEpisode(int id) async {
@@ -30,7 +31,7 @@ final class EpisodeLocalDataSourceImpl implements EpisodeLocalDataSource {
     return _cache.setString(_key(episode.id), jsonEncode(episode.toJson()));
   }
 
-  String _key(int id) => 'episode_$id';
+  String _key(int id) => jsonEncode([scope, id]);
 
   static EpisodeModel? _parseEpisode(String jsonString) {
     final decoded = jsonDecode(jsonString);
