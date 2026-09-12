@@ -1,0 +1,7 @@
+# The review prompt, schema, workflow and guards are trusted execution inputs.
+# Keep the CODEOWNERS file itself protected by the /.github/ rule below.
+/.github/ @matheusbristot
+/AGENTS.md @matheusbristot
+/tool/scan_review_context.sh @matheusbristot
+/tool/format_review_output.sh @matheusbristot
+/tool/test_format_review_output.sh @matheusbristot

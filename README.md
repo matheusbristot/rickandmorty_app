@@ -43,7 +43,9 @@ por página, com os mesmos filtros; em prd, a API fornece os totais e links.
 
 - Informe o número do episódio e toque em **Buscar**.
 - O episódio e todos os personagens são carregados pela API REST JSON.
-- O resultado completo é salvo localmente por número de episódio.
+- O resultado completo é salvo localmente por endpoint (incluindo ambiente) e
+  número de episódio. Por exemplo:
+  `["https://rickandmortyapi.com/api/episode",3]`.
 - O episódio concluído é salvo localmente mesmo quando algum personagem falha; os personagens disponíveis permanecem no cache para uso offline e nova tentativa.
 - Em uma nova consulta, o cache aparece imediatamente e é atualizado em segundo plano.
 - Sem conexão, a última versão salva continua disponível.
@@ -77,8 +79,9 @@ O package `cache` fornece a abstração de armazenamento chave-valor usada pela
 fonte local de episódios. Sua implementação padrão usa
 `SharedPreferencesAsync`; a dependência concreta fica montada no composition
 root (`lib/core/di`), enquanto a feature depende apenas do contrato `Cache`.
-Os episódios são persistidos como JSON por número, permitindo exibição
-imediata do cache, atualização em segundo plano e funcionamento offline.
+Os episódios são persistidos como JSON por endpoint (incluindo ambiente) e
+número, permitindo exibição imediata do cache, atualização em segundo plano e
+funcionamento offline.
 
 A orquestração entre episódio e personagens fica exclusivamente no
 `EpisodeRepositoryImpl`. As regras de fronteiras e responsabilidades estão
@@ -213,20 +216,28 @@ flavor `prd`, publica o arquivo como artefato do GitHub Actions por 90 dias e
 cria uma GitHub Release publicada com o APK anexado. A tag da release segue o
 formato `v<versão>`, como `v1.0.0`.
 
-O workflow **Rick Review** revisa automaticamente pull requests não rascunho
+O workflow **Automated Code Review** revisa automaticamente pull requests não rascunho
 quando são abertas, reabertas, recebem novos commits ou ficam prontas para
 review. Ele lê o `AGENTS.md` da base, analisa somente o diff da pull request e
-publica um comentário idempotente com a persona do Rick; novos commits
-atualizam o comentário anterior. Para ativá-lo, configure o secret
-`OPENAI_API_KEY` no repositório. Opcionalmente, defina a variável de Actions
-`OPENAI_REVIEW_MODEL` para trocar o modelo padrão (`gpt-5`). O job também pode
-ser reexecutado manualmente informando o número da pull request em
-**Actions → Rick Review → Run workflow**. A chave nunca é passada para código
-da branch da pull request. Antes da chamada externa, o workflow bloqueia o
-envio quando um arquivo sensível é alterado ou quando o scanner determinístico
-encontra padrões claros de API keys, tokens, URLs de banco ou chaves privadas no
-diff. A política completa para agentes está em `AGENTS.md`; o bloqueio é uma
-barreira adicional e não substitui rotação imediata de uma credencial suspeita.
+publica um comentário idempotente com o modelo local `qwen2.5-coder:3b`, usando
+a persona do Rick apenas no tom da resposta; novos commits atualizam o
+comentário anterior. O modelo é executado no runner via Ollama, sem
+`OPENAI_API_KEY` ou cobrança de API. O job pode ser reexecutado manualmente
+informando o número da pull request em **Actions → Automated Code Review → Run
+workflow**. A resposta do modelo é solicitada em JSON estruturado, validada
+deterministicamente e só então convertida para Markdown; respostas fora do
+contrato não são publicadas. A execução não passa credenciais para código da
+branch da pull request. Antes da inferência, o workflow bloqueia a análise
+quando um arquivo sensível é alterado ou quando o scanner determinístico
+encontra padrões claros de API keys, tokens, URLs de banco ou chaves privadas
+no diff. A política completa para agentes está em `AGENTS.md`; o bloqueio é uma barreira adicional
+e não substitui rotação imediata de uma credencial suspeita.
+
+Os arquivos que alimentam o review (`.github/`, `AGENTS.md` e os scripts de
+proteção em `tool/`) são protegidos por `.github/CODEOWNERS`. A branch `main`
+também exige aprovação de codeowner para alterações nesses caminhos, evitando
+que um colaborador altere o prompt, o schema ou a execução do revisor sem a
+aprovação do proprietário do repositório.
 
 Os ambientes são definidos por `--dart-define` no momento do build e não são
 assets do aplicativo. O job de produção não publica na Google Play e usa a
