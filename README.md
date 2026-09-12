@@ -233,6 +233,12 @@ encontra padrões claros de API keys, tokens, URLs de banco ou chaves privadas
 no diff. A política completa para agentes está em `AGENTS.md`; o bloqueio é uma barreira adicional
 e não substitui rotação imediata de uma credencial suspeita.
 
+Os arquivos que alimentam o review (`.github/`, `AGENTS.md` e os scripts de
+proteção em `tool/`) são protegidos por `.github/CODEOWNERS`. A branch `main`
+também exige aprovação de codeowner para alterações nesses caminhos, evitando
+que um colaborador altere o prompt, o schema ou a execução do revisor sem a
+aprovação do proprietário do repositório.
+
 Os ambientes são definidos por `--dart-define` no momento do build e não são
 assets do aplicativo. O job de produção não publica na Google Play e usa a
 assinatura debug existente no projeto. Configure o secret `ENV_PRD` no GitHub
