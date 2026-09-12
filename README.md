@@ -224,11 +224,13 @@ a persona do Rick apenas no tom da resposta; novos commits atualizam o
 comentário anterior. O modelo é executado no runner via Ollama, sem
 `OPENAI_API_KEY` ou cobrança de API. O job pode ser reexecutado manualmente
 informando o número da pull request em **Actions → Automated Code Review → Run
-workflow**. A execução não passa credenciais para código da branch da pull
-request. Antes da inferência, o workflow bloqueia a análise quando um arquivo
-sensível é alterado ou quando o scanner determinístico encontra padrões claros
-de API keys, tokens, URLs de banco ou chaves privadas no diff. A política
-completa para agentes está em `AGENTS.md`; o bloqueio é uma barreira adicional
+workflow**. A resposta do modelo é solicitada em JSON estruturado, validada
+deterministicamente e só então convertida para Markdown; respostas fora do
+contrato não são publicadas. A execução não passa credenciais para código da
+branch da pull request. Antes da inferência, o workflow bloqueia a análise
+quando um arquivo sensível é alterado ou quando o scanner determinístico
+encontra padrões claros de API keys, tokens, URLs de banco ou chaves privadas
+no diff. A política completa para agentes está em `AGENTS.md`; o bloqueio é uma barreira adicional
 e não substitui rotação imediata de uma credencial suspeita.
 
 Os ambientes são definidos por `--dart-define` no momento do build e não são

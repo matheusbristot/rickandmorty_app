@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "Aprovar",
+        "Aprovar com ressalvas",
+        "Solicitar mudanças"
+      ]
+    },
+    "observations": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "level": {
+            "type": "string",
+            "enum": [
+              "Bloqueador",
+              "Importante",
+              "Sugestão"
+            ]
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "problem": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          },
+          "correction": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 800
+          }
+        },
+        "required": [
+          "level",
+          "location",
+          "problem",
+          "correction"
+        ]
+      }
+    },
+    "strengths": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 400
+      }
+    },
+    "remark": {
+      "type": "string",
+      "maxLength": 240
+    }
+  },
+  "required": [
+    "verdict",
+    "observations",
+    "strengths",
+    "remark"
+  ]
+}
