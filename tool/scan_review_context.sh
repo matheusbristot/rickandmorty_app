@@ -11,7 +11,7 @@ diff_file="$1"
 files_file="$2"
 
 if [[ ! -s "$diff_file" || ! -s "$files_file" ]]; then
-  echo "::error::Review context files are missing or empty; Rick was not called."
+  echo "::error::Review context files are missing or empty; automated review was not run."
   exit 1
 fi
 
@@ -22,7 +22,7 @@ quoted_assignment_pattern="(database[_-]?url|api[_-]?key|secret|token|password|p
 sensitive_path_pattern='(^|/)(\.env(\.[^/]*)?|[^/]+\.(pem|key|p12|pfx|jks|keystore)|id_(rsa|dsa|ecdsa|ed25519)|credentials(\.json)?|service-account(\.json)?)$'
 
 if grep -E -i -q -- "$sensitive_path_pattern" "$files_file"; then
-  echo "::error::A sensitive file path was changed; Rick was not called."
+  echo "::error::A sensitive file path was changed; automated review was not run."
   echo "::notice::Review secrets and certificate files locally, then remove them from the pull request before retrying."
   exit 1
 fi
@@ -30,7 +30,7 @@ fi
 if grep -E -q -- "$credential_pattern" "$diff_file" || \
   grep -E -i -q -- "$assignment_pattern" "$diff_file" || \
   grep -E -i -q -- "$quoted_assignment_pattern" "$diff_file"; then
-  echo "::error::Potential credential detected in the pull request diff; Rick was not called."
+  echo "::error::Potential credential detected in the pull request diff; automated review was not run."
   echo "::notice::Remove and rotate/revoke the credential before retrying the review."
   exit 1
 fi
