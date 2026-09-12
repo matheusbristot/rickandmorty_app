@@ -85,43 +85,28 @@ jobs:
             "$REVIEW_DIFF_FILE" \
             "$REVIEW_FILES_FILE"
 
+      - name: Set up Ollama
+        uses: ai-action/setup-ollama@c08f1ef64da0eb30a55d1664798967ba7152d3d3
+        with:
+          version: 0.34.0
+
       - name: Run local review model
         id: review
         shell: bash
         run: |
           set -euo pipefail
 
-          curl --fail --silent --show-error https://ollama.com/install.sh | sh
-
-          hash -r
           ollama_bin="$(command -v ollama || true)"
           if [[ -z "$ollama_bin" ]]; then
-            for candidate in /usr/local/bin/ollama /usr/bin/ollama \
-              "$HOME/.ollama/bin/ollama"; do
-              if [[ -x "$candidate" ]]; then
-                ollama_bin="$candidate"
-                break
-              fi
-            done
-          fi
-          if [[ -z "$ollama_bin" ]]; then
-            echo "::error::Ollama was installed but its binary was not found."
+            echo "::error::The Ollama setup action did not expose its binary."
             exit 1
           fi
-
-          "$ollama_bin" serve > "$RUNNER_TEMP/ollama.log" 2>&1 &
-          ollama_pid=$!
-          cleanup() {
-            kill "$ollama_pid" >/dev/null 2>&1 || true
-          }
-          trap cleanup EXIT
 
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:11434/api/tags >/dev/null; then
               break
             fi
             if [[ "$attempt" == 30 ]]; then
-              cat "$RUNNER_TEMP/ollama.log" >&2
               exit 1
             fi
             sleep 1
